@@ -34,12 +34,23 @@ func Comment(c *cli.Context) {
 
 	utils.Check(err)
 
+    isForClose := getIsForClose(string(txt))
+    asignee := getAsignee(string(txt))
 	postComment := trim(string(txt))
+
 	if postComment != "" {
 		commented := api.CommentTo(taskId, postComment)
 		fmt.Println("Commented on Task: \"" + task.Name + "\"\n")
 		fmt.Println(commented)
-	} else {
+
+        if isForClose {
+            fmt.Println("Task closed \"" + task.Name + "\"\n")
+        }
+
+        if asignee != "" {
+            fmt.Println("New asignee \"" + asignee + "\"\n")
+        }
+    } else {
 		fmt.Println("Aborting comment due to empty content.")
 	}
 }
