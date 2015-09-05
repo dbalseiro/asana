@@ -3,5 +3,5 @@ set -e
 
 find . -name "*.go" |
 while read r; do
-   sed -i 's/github.com\/memerelics/github.com\/dbalseiro/g' "$r"
+   sed -i -e 's/github.com\/memerelics/github.com\/dbalseiro/g' "$r"
 done

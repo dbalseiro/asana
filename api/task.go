@@ -10,8 +10,8 @@ import (
 	"sort"
 	"strconv"
 
-	"github.com/memerelics/asana/config"
-	"github.com/memerelics/asana/utils"
+	"github.com/dbalseiro/asana/config"
+	"github.com/dbalseiro/asana/utils"
 )
 
 type Task_t struct {

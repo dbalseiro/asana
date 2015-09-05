@@ -3,7 +3,7 @@ package api
 import (
 	"encoding/json"
 
-	"github.com/memerelics/asana/utils"
+	"github.com/dbalseiro/asana/utils"
 )
 
 type Me_t struct {
