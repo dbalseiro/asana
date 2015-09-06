@@ -2,10 +2,10 @@ package main
 
 import (
 	"os"
-
 	"github.com/codegangsta/cli"
 
 	"github.com/dbalseiro/asana/commands"
+	"github.com/dbalseiro/asana/config"
 )
 
 func main() {
@@ -16,6 +16,11 @@ func main() {
 
 	app.Commands = defs()
 	app.Run(os.Args)
+}
+
+func isWithProject() bool {
+    p := config.Load().Project
+    return p != 0
 }
 
 func defs() []cli.Command {
@@ -36,6 +41,22 @@ func defs() []cli.Command {
 				commands.Workspaces(c)
 			},
 		},
+        {
+			Name:      "project-tasks",
+			ShortName: "pt",
+			Usage:     "get project tasks",
+			Action: func(c *cli.Context) {
+				commands.Tasks(c, true)
+			},
+		},
+{
+			Name:      "projects",
+			ShortName: "p",
+			Usage:     "get workspaces",
+			Action: func(c *cli.Context) {
+				commands.Projects(c)
+			},
+		},
 		{
 			Name:      "tasks",
 			ShortName: "ts",
@@ -45,7 +66,7 @@ func defs() []cli.Command {
 				cli.BoolFlag{Name: "refresh, r", Usage: "update cache"},
 			},
 			Action: func(c *cli.Context) {
-				commands.Tasks(c)
+				commands.Tasks(c, false)
 			},
 		},
 		{
@@ -56,7 +77,7 @@ func defs() []cli.Command {
 				cli.BoolFlag{Name: "verbose, v", Usage: "verbose output"},
 			},
 			Action: func(c *cli.Context) {
-				commands.Task(c)
+				commands.Task(c, isWithProject())
 			},
 		},
 		{
@@ -64,21 +85,28 @@ func defs() []cli.Command {
 			ShortName: "cm",
 			Usage:     "Post comment",
 			Action: func(c *cli.Context) {
-				commands.Comment(c)
+				commands.Comment(c, isWithProject())
 			},
 		},
 		{
 			Name:      "done",
 			Usage:     "Complete task",
 			Action: func(c *cli.Context) {
-				commands.Done(c)
+				commands.Done(c, isWithProject())
 			},
 		},
 		{
 			Name:  "due",
 			Usage: "set due date",
 			Action: func(c *cli.Context) {
-				commands.DueOn(c)
+				commands.DueOn(c, isWithProject())
+			},
+		},
+        {
+			Name:  "assign",
+			Usage: "assign task",
+			Action: func(c *cli.Context) {
+				commands.Assign(c, isWithProject())
 			},
 		},
 	}

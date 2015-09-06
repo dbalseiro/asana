@@ -1,0 +1,114 @@
+#!/bin/zsh
+set -e
+
+TASKFILE=/tmp/$$.tasks.tmp
+ASANACMD=./asana
+
+function main() {
+    while show_tasks; do
+        clear
+    done
+}
+
+function show_task() {
+    clear
+    $ASANACMD task $1 -v 
+
+    echo "[co]mment | [do]ne | [ass]ign"
+    echo -n "? "
+    read r
+    dotaskcommand $r $1
+}
+
+function dotaskcommand() {
+    case "$1" in
+        "co")
+            $ASANACMD comment $2
+            ;;
+        "do")
+            complete_task $2
+            ;;
+        "ass")
+            assign_task $2
+            ;;
+    esac
+}
+
+function complete_task() {
+    $ASANACMD done $1
+    clear_cache
+}
+
+function assign_task() {
+    $ASANACMD assign $1
+    clear_cache
+}
+
+function clear_cache() {
+    rm -f ~/.asana.cache
+}
+
+function change_workspace() {
+    clear
+    $ASANACMD config
+    clear_cache
+}
+
+function show_tasks() {
+    clear
+    $ASANACMD tasks 
+
+    echo 
+    echo "[ch]ange workspace | [r]efresh | [pro]ject | [number]"
+    echo -n "? "
+    read r
+
+    if [ "$r" = "" ]; then
+        return 1
+    fi
+    docommand $r
+}
+
+function change_project() {
+    clear
+    $ASANACMD projects
+}
+
+function show_project_tasks() {
+    clear
+    clear_cache
+    $ASANACMD pt
+    echo "[co]mment | [do]ne | [ass]ign"
+    echo -n "? "
+    read r
+
+    if [ "$r" = "" ]; then
+        clear_cache
+        return 1
+    fi
+    dotaskcommand $r $1
+}
+
+function docommand() {
+    case "$1" in
+        "ch")
+            change_workspace
+            ;;
+        "r")
+            clear_cache
+            ;;
+        "pro")
+            change_project
+            while show_project_tasks; do
+                clear
+            done
+            ;;
+        *)
+            if [[ $1 =~ [0-9].* ]]; then
+                show_task $1
+            fi
+            ;;
+    esac
+}
+
+main

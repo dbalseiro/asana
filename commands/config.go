@@ -7,7 +7,6 @@ import (
 	"strconv"
 
 	"github.com/codegangsta/cli"
-
 	"github.com/dbalseiro/asana/api"
 	"github.com/dbalseiro/asana/config"
 	"github.com/dbalseiro/asana/utils"
@@ -40,4 +39,12 @@ func Config(c *cli.Context) {
 	f, _ := os.Create(utils.Home() + "/.asana.yml")
 	f.WriteString("api_key: " + apiKey + "\n")
 	f.WriteString("workspace: " + strconv.Itoa(ws[index].Id) + "\n")
+}
+
+func ClearConfig() {
+    apiKey := config.Load().Api_key
+    workspace := config.Load().Workspace
+	f, _ := os.Create(utils.Home() + "/.asana.yml")
+	f.WriteString("api_key: " + apiKey + "\n")
+	f.WriteString("workspace: " + strconv.Itoa(workspace) + "\n")
 }

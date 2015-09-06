@@ -14,8 +14,8 @@ import (
 	"github.com/dbalseiro/asana/utils"
 )
 
-func Comment(c *cli.Context) {
-	taskId := api.FindTaskId(c.Args().First(), false)
+func Comment(c *cli.Context, withProject bool) {
+	taskId := api.FindTaskId(c.Args().First(), false, withProject)
 	task, stories := api.Task(taskId, true)
 
 	tmpFile := os.TempDir() + "/asana_comment.txt"
@@ -50,7 +50,7 @@ func Comment(c *cli.Context) {
         }
 
         if asignee != "" {
-            result := api.Update(taskId, "assignee", api.FindUserId("diego"))
+            result := api.Update(taskId, "assignee", api.FindUserId(strings.Replace(asignee, "@", "",-1)))
             fmt.Println("New asignee \"" + asignee + "\"\n")
             fmt.Println(result)
         }

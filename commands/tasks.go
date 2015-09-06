@@ -18,12 +18,12 @@ const (
 	CacheDuration = "5m"
 )
 
-func Tasks(c *cli.Context) {
+func Tasks(c *cli.Context, withProject bool) {
 	if c.Bool("no-cache") {
-		fromAPI(false)
+		fromAPI(false, withProject)
 	} else {
 		if utils.Older(CacheDuration, utils.CacheFile()) || c.Bool("refresh") {
-			fromAPI(true)
+			fromAPI(true, withProject)
 		} else {
 			txt, err := ioutil.ReadFile(utils.CacheFile())
 			if err == nil {
@@ -32,14 +32,17 @@ func Tasks(c *cli.Context) {
 					format(line)
 				}
 			} else {
-				fromAPI(true)
+				fromAPI(true, withProject)
 			}
 		}
 	}
+    if !withProject {
+        ClearConfig()
+    }
 }
 
-func fromAPI(saveCache bool) {
-	tasks := api.Tasks(url.Values{}, false)
+func fromAPI(saveCache bool, withProject bool) {
+	tasks := api.Tasks(url.Values{}, false, withProject)
 	if saveCache {
 		cache(tasks)
 	}

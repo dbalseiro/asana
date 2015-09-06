@@ -7,7 +7,6 @@ import (
 	"log"
 	"net/url"
 	"regexp"
-	"sort"
 	"strconv"
 
 	"github.com/dbalseiro/asana/config"
@@ -46,26 +45,30 @@ func (a ByDue) Len() int           { return len(a) }
 func (a ByDue) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByDue) Less(i, j int) bool { return a[i].Due_on < a[j].Due_on }
 
-func Tasks(params url.Values, withCompleted bool) []Task_t {
+func Tasks(params url.Values, withCompleted bool, withProject bool) []Task_t {
 	params.Add("workspace", strconv.Itoa(config.Load().Workspace))
 	params.Add("assignee", "me")
 	params.Add("opt_fields", "name,completed,due_on")
+
 	var tasks map[string][]Task_t
-	err := json.Unmarshal(Get("/api/1.0/tasks", params), &tasks)
-	utils.Check(err)
-	var tasks_without_due, tasks_with_due []Task_t
+
+    if withProject {
+        uri := "/api/1.0/projects/" + strconv.Itoa(config.Load().Project)  + "/tasks"
+        err := json.Unmarshal(Get(uri, nil), &tasks)
+        utils.Check(err)
+    } else {
+        err := json.Unmarshal(Get("/api/1.0/tasks", params), &tasks)
+        utils.Check(err)
+    }
+
+	var tasks_with_due []Task_t
 	for _, t := range tasks["data"] {
 		if !withCompleted && t.Completed {
 			continue
 		}
-		if t.Due_on == "" {
-			tasks_without_due = append(tasks_without_due, t)
-		} else {
-			tasks_with_due = append(tasks_with_due, t)
-		}
+        tasks_with_due = append(tasks_with_due, t)
 	}
-	sort.Sort(ByDue(tasks_with_due))
-	return append(tasks_with_due, tasks_without_due...)
+	return tasks_with_due
 }
 
 func Task(taskId string, verbose bool) (Task_t, []Story_t) {
@@ -95,7 +98,7 @@ func Task(taskId string, verbose bool) (Task_t, []Story_t) {
 	return t["data"], stories
 }
 
-func FindTaskId(index string, autoFirst bool) string {
+func FindTaskId(index string, autoFirst bool, withProject bool) string {
 	if index == "" {
 		if autoFirst == false {
 			log.Fatal("fatal: Task index is required.")
@@ -110,7 +113,7 @@ func FindTaskId(index string, autoFirst bool) string {
 	if err != nil { // cache file not exist
 		ind, parseErr := strconv.Atoi(index)
 		utils.Check(parseErr)
-		task := Tasks(url.Values{}, false)[ind]
+		task := Tasks(url.Values{}, false, withProject)[ind]
 		id = strconv.Itoa(task.Id)
 	} else {
 		lines := regexp.MustCompile("\n").Split(string(txt), -1)

@@ -12,6 +12,7 @@ import (
 type Conf struct {
 	Api_key   string
 	Workspace int
+    Project int
 }
 
 func Load() Conf {
@@ -27,3 +28,4 @@ func Load() Conf {
 	utils.Check(err)
 	return conf
 }
+
