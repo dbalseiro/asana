@@ -1,3 +1,4 @@
 - Agregarle color
 - Agregarle navegacion de URLs con urlview
 - create task
+- agregarle hashtags de proyectos
