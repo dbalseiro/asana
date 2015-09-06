@@ -14,7 +14,7 @@ function show_task() {
     clear
     $ASANACMD task $1 -v 
 
-    echo "[co]mment | [do]ne | [ass]ign"
+    echo "[co]mment | [do]ne | [ass]ign | assign to [me]"
     echo -n "? "
     read r
     dotaskcommand $r $1
@@ -31,6 +31,9 @@ function dotaskcommand() {
         "ass")
             assign_task $2
             ;;
+        "me")
+            assign_task_to_me $2
+            ;;
     esac
 }
 
@@ -39,8 +42,15 @@ function complete_task() {
     clear_cache
 }
 
+function assign_task_to_me() {
+    $ASANACMD me $1
+    clear_cache
+}
+
 function assign_task() {
-    $ASANACMD assign $1
+    echo -n "who? "
+    read w
+    $ASANACMD assign $1 $w
     clear_cache
 }
 
@@ -56,7 +66,7 @@ function change_workspace() {
 
 function show_tasks() {
     clear
-    $ASANACMD tasks 
+    $ASANACMD tasks | grep -v ":$"
 
     echo 
     echo "[ch]ange workspace | [r]efresh | [pro]ject | [number]"
@@ -78,7 +88,7 @@ function show_project_tasks() {
     clear
     clear_cache
     $ASANACMD pt
-    echo "[co]mment | [do]ne | [ass]ign"
+    echo "[number]"
     echo -n "? "
     read r
 
@@ -86,7 +96,13 @@ function show_project_tasks() {
         clear_cache
         return 1
     fi
-    dotaskcommand $r $1
+    dotasklistcommand $r $1
+}
+
+function dotasklistcommand() {
+    if [[ $1 =~ [0-9].* ]]; then
+        show_task $1
+    fi
 }
 
 function docommand() {

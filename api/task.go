@@ -46,17 +46,17 @@ func (a ByDue) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByDue) Less(i, j int) bool { return a[i].Due_on < a[j].Due_on }
 
 func Tasks(params url.Values, withCompleted bool, withProject bool) []Task_t {
-	params.Add("workspace", strconv.Itoa(config.Load().Workspace))
-	params.Add("assignee", "me")
-	params.Add("opt_fields", "name,completed,due_on")
+	params.Add("opt_fields", "name,completed,due_on,assignee.name")
 
 	var tasks map[string][]Task_t
 
     if withProject {
         uri := "/api/1.0/projects/" + strconv.Itoa(config.Load().Project)  + "/tasks"
-        err := json.Unmarshal(Get(uri, nil), &tasks)
+        err := json.Unmarshal(Get(uri, params), &tasks)
         utils.Check(err)
     } else {
+        params.Add("workspace", strconv.Itoa(config.Load().Workspace))
+        params.Add("assignee", "me")
         err := json.Unmarshal(Get("/api/1.0/tasks", params), &tasks)
         utils.Check(err)
     }

@@ -29,7 +29,9 @@ func Tasks(c *cli.Context, withProject bool) {
 			if err == nil {
 				lines := regexp.MustCompile("\n").Split(string(txt), -1)
 				for _, line := range lines {
-					format(line)
+                    if line != "" {
+                        format(line)
+                    }
 				}
 			} else {
 				fromAPI(true, withProject)
@@ -47,7 +49,7 @@ func fromAPI(saveCache bool, withProject bool) {
 		cache(tasks)
 	}
 	for i, t := range tasks {
-		fmt.Printf("%2d [ %10s ] %s\n", i, t.Due_on, t.Name)
+        fmt.Printf("%2d [ %10s ] @%s: %s\n", i, t.Due_on, t.Assignee.Name, t.Name)
 	}
 }
 
@@ -58,6 +60,7 @@ func cache(tasks []api.Task_t) {
 		f.WriteString(strconv.Itoa(i) + ":")
 		f.WriteString(strconv.Itoa(t.Id) + ":")
 		f.WriteString(t.Due_on + ":")
+        f.WriteString(t.Assignee.Name + ":")
 		f.WriteString(t.Name + "\n")
 	}
 }
@@ -68,7 +71,12 @@ func format(line string) {
 	index := regexp.MustCompile("^[0-9]*").FindString(line)
 	line = regexp.MustCompile("^[0-9]*:").ReplaceAllString(line, "") // remove index
 	line = regexp.MustCompile("^[0-9]*:").ReplaceAllString(line, "") // remove task_id
-	date := regexp.MustCompile("^" + dateRegexp).FindString(line)
+	
+    date := regexp.MustCompile("^" + dateRegexp).FindString(line)
 	line = regexp.MustCompile("^("+dateRegexp+")?:").ReplaceAllString(line, "") // remove date
-	fmt.Printf("%2s [ %10s ] %s\n", index, date, line)
+    
+    assignee := regexp.MustCompile("^[a-zA-Z]*:").FindString(line)
+	line = regexp.MustCompile("^.*:").ReplaceAllString(line, "") // remove assignee
+
+	fmt.Printf("%2s [ %10s ] @%s %s\n", index, date, assignee, line)
 }

@@ -109,5 +109,12 @@ func defs() []cli.Command {
 				commands.Assign(c, isWithProject())
 			},
 		},
+{
+			Name:  "me",
+			Usage: "assign task to me",
+			Action: func(c *cli.Context) {
+				commands.AssignMe(c, isWithProject())
+			},
+		},
 	}
 }
