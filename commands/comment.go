@@ -44,15 +44,39 @@ func Comment(c *cli.Context) {
 		fmt.Println(commented)
 
         if isForClose {
+            result := api.Update(taskId, "completed", "true")
             fmt.Println("Task closed \"" + task.Name + "\"\n")
+            fmt.Println(result)
         }
 
         if asignee != "" {
+            result := api.Update(taskId, "assignee", api.FindUserId("diego"))
             fmt.Println("New asignee \"" + asignee + "\"\n")
+            fmt.Println(result)
         }
     } else {
 		fmt.Println("Aborting comment due to empty content.")
 	}
+}
+
+func getIsForClose(txt string) bool {
+    result := strings.Split(txt, "\n")
+    for i := range result {
+        if result[i] == "%CLOSE" {
+            return true
+        }
+    }
+    return false
+}
+
+func getAsignee(txt string) string {
+    result := strings.Split(txt, "\n")
+    for i := range result {
+        if strings.HasPrefix(result[i], "@") {
+            return result[i]
+        }
+    }
+    return ""
 }
 
 func template(f *os.File, task api.Task_t, stories []api.Story_t) error {
@@ -74,7 +98,9 @@ func commentOut(txt string) string {
 
 func trim(txt string) string {
 	var result string
-	result = regexp.MustCompile("#.*\n").ReplaceAllString(txt, "")    // Remove comments
+	result = regexp.MustCompile("\n@.*\n").ReplaceAllString(txt, "")    // Remove asignees
+	result = regexp.MustCompile("\n%CLOSE\n").ReplaceAllString(result, "")    // Remove close mark
+	result = regexp.MustCompile("#.*\n").ReplaceAllString(result, "")    // Remove comments
 	result = regexp.MustCompile("\n*$").ReplaceAllString(result, "")  // Remove blank lines
 	result = regexp.MustCompile("\n").ReplaceAllString(result, "\\n") // Escape
 	return result
