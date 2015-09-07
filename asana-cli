@@ -61,6 +61,7 @@ function assign_task() {
     echo -n "who? "
     read w
     $ASANACMD assign $1 $w
+    read p
     clear_cache
 }
 

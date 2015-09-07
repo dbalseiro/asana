@@ -23,6 +23,7 @@ func Task(c *cli.Context, withProject bool) {
     green := ansi.ColorCode("green")
     reset := ansi.ColorCode("reset")
     bold := ansi.ColorCode("white")
+    yellow := ansi.ColorCode("yellow")
 
 	fmt.Printf("[ %s%s%s ] %s%s%s\n", red, t.Due_on, reset, bold, t.Name, reset)
 
@@ -38,6 +39,11 @@ func Task(c *cli.Context, withProject bool) {
             if strings.HasPrefix(s.String(), "*") {
                 color = blue
             }
+            
+            if strings.HasPrefix(s.String(), "* attached") {
+                color = yellow
+            }
+
             if strings.HasPrefix(s.String(), ">") {
                 color = green
             }

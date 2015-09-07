@@ -1,1 +1,4 @@
+- no tienen color los tags
 - Agregarle navegacion de URLs con urlview
+- No anda reasignacion (ni en el comentario ni en el ass)
+
