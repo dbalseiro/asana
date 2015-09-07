@@ -8,6 +8,12 @@ import (
 	"github.com/dbalseiro/asana/api"
 )
 
+func CreateTask(c *cli.Context, withProject bool) {
+    task := api.CreateTask(withProject, c.String("name"))
+
+    fmt.Println(task)
+}
+
 func Task(c *cli.Context, withProject bool) {
 	t, stories := api.Task(api.FindTaskId(c.Args().First(), true, withProject), c.Bool("verbose"))
 

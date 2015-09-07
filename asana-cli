@@ -69,7 +69,7 @@ function show_tasks() {
     $ASANACMD tasks | grep -v ":$"
 
     echo 
-    echo "[ch]ange workspace | [r]efresh | [pro]ject | [number]"
+    echo "[ch]ange workspace | [r]efresh | [pro]ject | [cr]eate task | [number]"
     echo -n "? "
     read r
 
@@ -105,6 +105,13 @@ function dotasklistcommand() {
     fi
 }
 
+function create_task() {
+    echo -n "name? "
+    read name
+    $ASANACMD ct --name "$name"
+    clear_cache
+}
+
 function docommand() {
     case "$1" in
         "ch")
@@ -118,6 +125,9 @@ function docommand() {
             while show_project_tasks; do
                 clear
             done
+            ;;
+        "cr")
+            create_task
             ;;
         *)
             if [[ $1 =~ [0-9].* ]]; then

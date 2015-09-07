@@ -80,6 +80,17 @@ func defs() []cli.Command {
 				commands.Task(c, isWithProject())
 			},
 		},
+        {
+			Name:      "createtask",
+			ShortName: "ct",
+			Usage:     "create a task",
+			Flags: []cli.Flag{
+				cli.StringFlag{Name: "name, n", Usage: "name of the task"},
+			},
+			Action: func(c *cli.Context) {
+				commands.CreateTask(c, isWithProject())
+			},
+		},
 		{
 			Name:      "comment",
 			ShortName: "cm",
