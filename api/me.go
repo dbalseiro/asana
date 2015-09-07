@@ -26,7 +26,7 @@ func Me() Me_t {
 
 func FindUserId(name string) string {
     var users map[string][]User_t
-    uri := "/api/1.0/workspaces/" + strconv.Itoa(config.Load().Workspace) + "/typeahead?type=user&query=diego"
+    uri := "/api/1.0/workspaces/" + strconv.Itoa(config.Load().Workspace) + "/typeahead?type=user&query=" + name
     err := json.Unmarshal(Get(uri, nil), &users)
     utils.Check(err)
     return strconv.Itoa(users["data"][0].Id)
