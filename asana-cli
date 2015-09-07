@@ -99,7 +99,7 @@ function show_project_tasks() {
     clear
     clear_cache
     $ASANACMD pt
-    echo "[number]"
+    echo "${CYAN}[cr]${RESET}eate task | ${CYAN}[number]${RESET}"
     echo -n "? "
     read r
 
@@ -113,6 +113,10 @@ function show_project_tasks() {
 function dotasklistcommand() {
     if [[ $1 =~ [0-9].* ]]; then
         show_task $1
+    else
+        if [ "$1" = "cr" ]; then
+            create_task
+        fi
     fi
 }
 
