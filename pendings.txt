@@ -1,3 +1,2 @@
 - Agregarle color
 - Agregarle navegacion de URLs con urlview
-- agregarle hashtags de proyectos

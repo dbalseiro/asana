@@ -49,7 +49,15 @@ func fromAPI(saveCache bool, withProject bool) {
 		cache(tasks)
 	}
 	for i, t := range tasks {
-        fmt.Printf("%2d [ %10s ] @%s: %s\n", i, t.Due_on, t.Assignee.Name, t.Name)
+        fmt.Printf("%2d [ %10s ] @%s: %s ", i, t.Due_on, t.Assignee.Name, t.Name)
+        for _, p := range t.Projects {
+            fmt.Printf("#%s ", p.Name)
+        }
+
+        for _, ta := range t.Tags {
+            fmt.Printf("#%s ", ta.Name)
+        }
+        fmt.Printf("\n")
 	}
 }
 
@@ -61,8 +69,16 @@ func cache(tasks []api.Task_t) {
 		f.WriteString(strconv.Itoa(t.Id) + ":")
 		f.WriteString(t.Due_on + ":")
         f.WriteString(t.Assignee.Name + ":")
-		f.WriteString(t.Name + "\n")
-	}
+		f.WriteString(t.Name + " ")
+        for _, p := range t.Projects {
+            f.WriteString("#" + p.Name + " ")
+        }
+
+        for _, ta := range t.Tags {
+            f.WriteString("#" + ta.Name + " ")
+        }
+        f.WriteString("\n")
+}
 }
 
 func format(line string) {

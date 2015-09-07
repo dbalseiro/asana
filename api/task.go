@@ -46,7 +46,7 @@ func (a ByDue) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByDue) Less(i, j int) bool { return a[i].Due_on < a[j].Due_on }
 
 func Tasks(params url.Values, withCompleted bool, withProject bool) []Task_t {
-	params.Add("opt_fields", "name,completed,due_on,assignee.name")
+	params.Add("opt_fields", "name,completed,due_on,assignee.name,projects.name,tags.name")
 
 	var tasks map[string][]Task_t
 

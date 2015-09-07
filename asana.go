@@ -12,7 +12,7 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "asana"
 	app.Version = "0.1.2"
-	app.Usage = "asana cui client"
+	app.Usage = "asana cli client"
 
 	app.Commands = defs()
 	app.Run(os.Args)
@@ -49,7 +49,7 @@ func defs() []cli.Command {
 				commands.Tasks(c, true)
 			},
 		},
-{
+        {
 			Name:      "projects",
 			ShortName: "p",
 			Usage:     "get workspaces",
