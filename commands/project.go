@@ -5,6 +5,7 @@ import (
 	"os"
 	"strconv"
 
+    "github.com/mgutz/ansi"
 	"github.com/codegangsta/cli"
 	"github.com/dbalseiro/asana/api"
 	"github.com/dbalseiro/asana/config"
@@ -14,10 +15,12 @@ import (
 func Projects(c *cli.Context) {
     projects := api.Projects()
     index := 0
+    cyan := ansi.ColorCode("cyan")
+    reset := ansi.ColorCode("reset")
     if len(projects) > 0 {
         fmt.Println("\n" + strconv.Itoa(len(projects)) + " projects found.")
         for i, p := range projects {
-            fmt.Printf("[%d] %16d %s\n", i, p.Id, p.Name)
+            fmt.Printf("%s[%2d]%s %s\n", cyan, i, reset, p.Name)
         }
         index = utils.EndlessSelect(len(projects)-1, index)
     }

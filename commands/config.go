@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 
+    "github.com/mgutz/ansi"
 	"github.com/codegangsta/cli"
 	"github.com/dbalseiro/asana/api"
 	"github.com/dbalseiro/asana/config"
@@ -28,10 +29,12 @@ func Config(c *cli.Context) {
 	ws := api.Me().Workspaces
 	index := 0
 
+    cyan := ansi.ColorCode("cyan")
+    reset := ansi.ColorCode("reset")
 	if len(ws) > 1 {
 		fmt.Println("\n" + strconv.Itoa(len(ws)) + " workspaces found.")
 		for i, w := range ws {
-			fmt.Printf("[%d] %16d %s\n", i, w.Id, w.Name)
+			fmt.Printf("%s[%d]%s %s\n", cyan, i, reset, w.Name)
 		}
 		index = utils.EndlessSelect(len(ws)-1, index)
 	}

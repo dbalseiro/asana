@@ -2,8 +2,10 @@ package commands
 
 import (
 	"fmt"
+    "strings"
 
 	"github.com/codegangsta/cli"
+    "github.com/mgutz/ansi"
 
 	"github.com/dbalseiro/asana/api"
 )
@@ -16,8 +18,13 @@ func CreateTask(c *cli.Context, withProject bool) {
 
 func Task(c *cli.Context, withProject bool) {
 	t, stories := api.Task(api.FindTaskId(c.Args().First(), true, withProject), c.Bool("verbose"))
+    red := ansi.ColorCode("red")
+    blue := ansi.ColorCode("blue")
+    green := ansi.ColorCode("green")
+    reset := ansi.ColorCode("reset")
+    bold := ansi.ColorCode("white")
 
-	fmt.Printf("[ %s ] %s\n", t.Due_on, t.Name)
+	fmt.Printf("[ %s%s%s ] %s%s%s\n", red, t.Due_on, reset, bold, t.Name, reset)
 
 	showTags(t.Tags)
 
@@ -26,7 +33,16 @@ func Task(c *cli.Context, withProject bool) {
 	if stories != nil {
 		fmt.Println("\n----------------------------------------\n")
 		for _, s := range stories {
-			fmt.Printf("%s\n", s)
+            color := ""
+
+            if strings.HasPrefix(s.String(), "*") {
+                color = blue
+            }
+            if strings.HasPrefix(s.String(), ">") {
+                color = green
+            }
+
+			fmt.Printf("%s%s%s\n", color, s, reset)
 		}
 	}
 }

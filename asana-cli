@@ -1,6 +1,16 @@
 #!/bin/zsh
 set -e
 
+autoload colors
+if [[ "$terminfo[colors]" -gt 8 ]]; then
+    colors
+fi
+for COLOR in RED GREEN YELLOW BLUE MAGENTA CYAN BLACK WHITE; do
+    eval $COLOR='$fg_no_bold[${(L)COLOR}]'
+    eval BOLD_$COLOR='$fg_bold[${(L)COLOR}]'
+done
+eval RESET='$reset_color'
+
 TASKFILE=/tmp/$$.tasks.tmp
 ASANACMD=./asana
 
@@ -14,7 +24,7 @@ function show_task() {
     clear
     $ASANACMD task $1 -v 
 
-    echo "[co]mment | [do]ne | [ass]ign | assign to [me]"
+    echo "${CYAN}[co]${RESET}mment | ${CYAN}[do]${RESET}ne | ${CYAN}[ass]${RESET}ign | assign to ${CYAN}[me]${RESET}"
     echo -n "? "
     read r
     dotaskcommand $r $1
@@ -69,7 +79,7 @@ function show_tasks() {
     $ASANACMD tasks | grep -v ":$"
 
     echo 
-    echo "[ch]ange workspace | [r]efresh | [pro]ject | [cr]eate task | [number]"
+    echo "${CYAN}[ch]${RESET}ange workspace | ${CYAN}[r]${RESET}efresh | ${CYAN}[pro]${RESET}ject | ${CYAN}[cr]${RESET}eate task | ${CYAN}[number]${RESET}"
     echo -n "? "
     read r
 
