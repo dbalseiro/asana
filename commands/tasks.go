@@ -60,7 +60,7 @@ func fromAPI(saveCache bool, withProject bool) {
         }
 
         for _, ta := range t.Tags {
-            fmt.Printf("#%s ", ta.Name)
+            fmt.Printf("%s#%s%s ", blue, ta.Name, reset)
         }
         fmt.Printf("\n")
 	}
