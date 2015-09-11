@@ -22,12 +22,18 @@ function main() {
 
 function show_task() {
     clear
-    $ASANACMD task $1 -v 
+    $ASANACMD task $1 -v > $TASKFILE
+    r="v"
 
-    echo "${CYAN}[co]${RESET}mment | ${CYAN}[do]${RESET}ne | ${CYAN}[ass]${RESET}ign | assign to ${CYAN}[me]${RESET}"
-    echo -n "? "
-    read r
-    dotaskcommand $r $1
+    while [ "$r" = "v" ]; do
+        cat $TASKFILE
+        echo "${CYAN}[co]${RESET}mment | ${CYAN}[do]${RESET}ne | ${CYAN}[ass]${RESET}ign | assign to ${CYAN}[me]${RESET} | ${CYAN}[v]${RESET}iew attach"
+        echo -n "? "
+        read r
+        dotaskcommand $r $1
+    done
+
+    rm $TASKFILE
 }
 
 function dotaskcommand() {
@@ -44,8 +50,16 @@ function dotaskcommand() {
         "me")
             assign_task_to_me $2
             ;;
+        "v")
+            view_attach
     esac
 }
+
+function view_attach() {
+    clear
+    cat $TASKFILE | grep attached | urlview
+}
+    
 
 function complete_task() {
     $ASANACMD done $1

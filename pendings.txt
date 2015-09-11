@@ -1,2 +1,0 @@
-- Agregarle navegacion de URLs con urlview
-- no funca agregfar tarea en proyecto
