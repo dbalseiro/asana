@@ -4,8 +4,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"strings"
-
+   "strings"
 	"github.com/dbalseiro/asana/config"
 	"github.com/dbalseiro/asana/utils"
 )

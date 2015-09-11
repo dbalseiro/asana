@@ -3,6 +3,7 @@ package commands
 import (
 	"fmt"
     "strings"
+    "regexp"
 
 	"github.com/codegangsta/cli"
     "github.com/mgutz/ansi"
@@ -39,8 +40,8 @@ func Task(c *cli.Context, withProject bool) {
             if strings.HasPrefix(s.String(), "*") {
                 color = blue
             }
-            
-            if strings.HasPrefix(s.String(), "* attached") {
+            match, _ := regexp.MatchString("\\* .* attached", s.String())
+            if match {
                 color = yellow
             }
 
