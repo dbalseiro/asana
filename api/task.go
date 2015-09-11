@@ -161,22 +161,26 @@ func Update(taskId string, key string, value string) Task_t {
 }
 
 func CreateTask(withProject bool, name string) Task_t {
-    proj := ""
     workspace := strconv.Itoa(config.Load().Workspace)
-    if withProject {
-        proj = `"project": ` + strconv.Itoa(config.Load().Project) + ","
-    }
     data := `{
         "data" : {
             "assignee": "me",
-            "workspace": ` + workspace + `,` + proj + `
+            "workspace": ` + workspace + `, 
             "name": "` + name + `"
         }
     }`
+
     respBody := Post("/tasks", data)
     var output map[string]Task_t
     err := json.Unmarshal(respBody, &output)
     utils.Check(err)
 
-    return output["data"]
+    newTask := output["data"]
+    if withProject {
+        p := strconv.Itoa(config.Load().Project)
+        t := strconv.Itoa(newTask.Id)
+        uri := "/tasks/" + t + "/addProject?project=" + p 
+        Post(uri, "")
+    }
+    return newTask
 }

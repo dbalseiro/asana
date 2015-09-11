@@ -125,6 +125,7 @@ function create_task() {
     read name
     $ASANACMD ct --name "$name"
     clear_cache
+    read pepe
 }
 
 function docommand() {
