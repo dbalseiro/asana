@@ -1,0 +1,3 @@
+- Poner Attach
+- probar de poner confirmacion al agregar tarea al proyecto a ver si funca...
+

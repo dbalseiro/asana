@@ -54,7 +54,7 @@ func fromAPI(saveCache bool, withProject bool) {
     green := ansi.ColorCode("green")
     reset := ansi.ColorCode("reset")
 	for i, t := range tasks {
-        fmt.Printf("%2d [ %s%10s%s ] %s@%s%s: %s ", i,red, t.Due_on, reset, green, t.Assignee.Name, reset, t.Name)
+        fmt.Printf("%2d [ %s%10s%s ] %s@%s%s: ", i,red, t.Due_on, reset, green, t.Assignee.Name, reset)
         for _, p := range t.Projects {
             fmt.Printf("%s#%s%s ", blue,p.Name, reset)
         }
@@ -62,7 +62,7 @@ func fromAPI(saveCache bool, withProject bool) {
         for _, ta := range t.Tags {
             fmt.Printf("%s#%s%s ", blue, ta.Name, reset)
         }
-        fmt.Printf("\n")
+        fmt.Printf("%s\n", t.Name)
 	}
 }
 
@@ -78,7 +78,6 @@ func cache(tasks []api.Task_t) {
 		f.WriteString(strconv.Itoa(t.Id) + ":")
 		f.WriteString(t.Due_on + ":")
         f.WriteString(t.Assignee.Name + ":")
-		f.WriteString(t.Name + " ")
         for _, p := range t.Projects {
             f.WriteString(blue + "#" + p.Name + " " + reset)
         }
@@ -86,6 +85,7 @@ func cache(tasks []api.Task_t) {
         for _, ta := range t.Tags {
             f.WriteString(blue + "#" + ta.Name + " " + reset)
         }
+		f.WriteString(t.Name + " ")
         f.WriteString("\n")
     }
 }

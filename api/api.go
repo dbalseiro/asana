@@ -55,6 +55,8 @@ func fire(req *http.Request) []byte {
 	req.SetBasicAuth(config.Load().Api_key, "")
 
 	resp, err := client.Do(req)
+    utils.Check(err)
+
 	body, err := ioutil.ReadAll(resp.Body)
 
 	utils.Check(err)
