@@ -100,10 +100,10 @@ func format(line string) {
 	index := regexp.MustCompile("^[0-9]*").FindString(line)
 	line = regexp.MustCompile("^[0-9]*:").ReplaceAllString(line, "") // remove index
 	line = regexp.MustCompile("^[0-9]*:").ReplaceAllString(line, "") // remove task_id
-	
+
     date := regexp.MustCompile("^" + dateRegexp).FindString(line)
 	line = regexp.MustCompile("^("+dateRegexp+")?:").ReplaceAllString(line, "") // remove date
-    
+
     assignee := regexp.MustCompile("^[a-zA-Z]*:").FindString(line)
 	line = regexp.MustCompile("^.*:").ReplaceAllString(line, "") // remove assignee
 

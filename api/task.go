@@ -13,6 +13,10 @@ import (
 	"github.com/dbalseiro/asana/utils"
 )
 
+type Tasks_t struct {
+    Data []Task_t
+}
+
 type Task_t struct {
 	Id              int
 	Created_at      string
@@ -28,7 +32,7 @@ type Task_t struct {
 	Workspace       Base
 	Parent          string
 	Projects        []Base
-	Folloers        []Base
+	Followers        []Base
 }
 
 type Story_t struct {
@@ -48,7 +52,7 @@ func (a ByDue) Less(i, j int) bool { return a[i].Due_on < a[j].Due_on }
 func Tasks(params url.Values, withCompleted bool, withProject bool) []Task_t {
 	params.Add("opt_fields", "name,completed,due_on,assignee.name,projects.name,tags.name")
 
-	var tasks map[string][]Task_t
+	var tasks Tasks_t
 
     if withProject {
         uri := "/api/1.0/projects/" + strconv.Itoa(config.Load().Project)  + "/tasks"
@@ -57,12 +61,13 @@ func Tasks(params url.Values, withCompleted bool, withProject bool) []Task_t {
     } else {
         params.Add("workspace", strconv.Itoa(config.Load().Workspace))
         params.Add("assignee", "me")
+        params.Add("limit", "100")
         err := json.Unmarshal(Get("/api/1.0/tasks", params), &tasks)
         utils.Check(err)
     }
 
 	var tasks_with_due []Task_t
-	for _, t := range tasks["data"] {
+	for _, t := range tasks.Data {
 		if !withCompleted && t.Completed {
 			continue
 		}
