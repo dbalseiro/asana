@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"regexp"
 	"strconv"
+    "strings"
 
 	"github.com/dbalseiro/asana/config"
 	"github.com/dbalseiro/asana/utils"
@@ -71,6 +72,9 @@ func Tasks(params url.Values, withCompleted bool, withProject bool) []Task_t {
 		if !withCompleted && t.Completed {
 			continue
 		}
+        if strings.HasSuffix(t.Name, ":") {
+            continue
+        }
         tasks_with_due = append(tasks_with_due, t)
 	}
 	return tasks_with_due
