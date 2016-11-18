@@ -27,7 +27,7 @@ function show_task() {
     $ASANACMD task $1 -v > $TASKFILE
     r="v"
 
-    while [ "$r" = "v" ]; do
+    while [ "$r" = "v" -o "$r" = "co" ]; do
         cat $TASKFILE
         echo "${CYAN}[co]${RESET}mment | ${CYAN}[do]${RESET}ne | ${CYAN}[ass]${RESET}ign | assign to ${CYAN}[me]${RESET} | ${CYAN}[v]${RESET}iew attach"
         echo -n "? "

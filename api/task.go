@@ -75,9 +75,28 @@ func Tasks(params url.Values, withCompleted bool, withProject bool) []Task_t {
         if strings.HasSuffix(t.Name, ":") {
             continue
         }
+
+        if HasTagsBlacklisted(t) {
+            continue
+        }
+
         tasks_with_due = append(tasks_with_due, t)
 	}
 	return tasks_with_due
+}
+
+func HasTagsBlacklisted(data Task_t) bool {
+    for _, t := range data.Projects {
+        if strings.Contains(t.Name, "CMB") {
+            return true
+        }
+    }
+    for _, t := range data.Tags {
+        if strings.Contains(t.Name, "CMB") {
+            return true
+        }
+    }
+    return false
 }
 
 func Task(taskId string, verbose bool) (Task_t, []Story_t) {
