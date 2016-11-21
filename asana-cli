@@ -29,7 +29,7 @@ function show_task() {
 
     while [ "$r" = "v" -o "$r" = "co" ]; do
         cat $TASKFILE
-        echo "${CYAN}[co]${RESET}mment | ${CYAN}[do]${RESET}ne | ${CYAN}[ass]${RESET}ign | assign to ${CYAN}[me]${RESET} | ${CYAN}[v]${RESET}iew attach"
+        echo "${CYAN}[co]${RESET}mment | ${CYAN}[do]${RESET}ne | ${CYAN}[ass]${RESET}ign | assign to ${CYAN}[me]${RESET} | ${CYAN}[v]${RESET}iew attach | add ${CYAN}[t]${RESET}ag"
         echo -n "? "
         read r
         if [ "$r" = "" ]; then
@@ -60,6 +60,9 @@ function dotaskcommand() {
         "v")
             view_attach
             ;;
+        "t")
+            addtag $2
+            ;;
     esac
 }
 
@@ -83,6 +86,14 @@ function assign_task() {
     echo -n "who? "
     read w
     $ASANACMD assign $1 $w
+    read p
+    clear_cache
+}
+
+function addtag() {
+    echo -n "tag? "
+    read t
+    $ASANACMD addtag $1 "$t"
     read p
     clear_cache
 }

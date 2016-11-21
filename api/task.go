@@ -207,8 +207,14 @@ func CreateTask(withProject bool, name string) Task_t {
     if withProject {
         p := strconv.Itoa(config.Load().Project)
         t := strconv.Itoa(newTask.Id)
-        uri := "/tasks/" + t + "/addProject?project=" + p 
-        Post(uri, "")
+        uri := "/tasks/" + t + "/addProject"
+        dd := `{
+            "data": {
+                "project": ` + p + `
+            }
+        }`
+
+        Post(uri, dd)
     }
     return newTask
 }

@@ -58,11 +58,11 @@ func showTags(tags []api.Base) {
 	if len(tags) > 0 {
 		fmt.Print("  Tags: ")
 		for i, tag := range tags {
-			print(tag.Name)
+			fmt.Print(tag.Name)
 			if len(tags) != 1 && i != (len(tags)-1) {
 				print(", ")
 			}
 		}
-		println("")
+		fmt.Println("")
 	}
 }

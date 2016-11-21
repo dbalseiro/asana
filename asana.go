@@ -120,7 +120,14 @@ func defs() []cli.Command {
 				commands.Assign(c, isWithProject())
 			},
 		},
-{
+        {
+			Name:  "addtag",
+			Usage: "add tag to task",
+			Action: func(c *cli.Context) {
+				commands.AddTag(c, isWithProject())
+			},
+		},
+        {
 			Name:  "me",
 			Usage: "assign task to me",
 			Action: func(c *cli.Context) {
