@@ -29,7 +29,7 @@ function show_task() {
 
     while [ "$r" = "v" -o "$r" = "co" ]; do
         cat $TASKFILE
-        echo "${CYAN}[co]${RESET}mment | ${CYAN}[do]${RESET}ne | ${CYAN}[ass]${RESET}ign | assign to ${CYAN}[me]${RESET} | ${CYAN}[v]${RESET}iew attach | add ${CYAN}[t]${RESET}ag"
+        echo "${CYAN}[e]${RESET}dit | ${CYAN}[co]${RESET}mment | ${CYAN}[do]${RESET}ne | ${CYAN}[ass]${RESET}ign | assign to ${CYAN}[me]${RESET} | ${CYAN}[v]${RESET}iew attach | add ${CYAN}[t]${RESET}ag"
         echo -n "? "
         read r
         if [ "$r" = "" ]; then
@@ -60,6 +60,10 @@ function dotaskcommand() {
         "v")
             view_attach
             ;;
+        "e")
+            $ASANACMD description $2
+            read r
+            ;;
         "t")
             addtag $2
             ;;
@@ -70,7 +74,7 @@ function view_attach() {
     clear
     cat $TASKFILE | grep attached | urlview
 }
-    
+
 
 function complete_task() {
     $ASANACMD done $1
@@ -112,7 +116,7 @@ function show_tasks() {
     clear
     if [ "$LASTTASK" = "" ]; then
         $ASANACMD tasks | grep -v ":$"
-        echo 
+        echo
         echo "${CYAN}[ch]${RESET}ange workspace | ${CYAN}[r]${RESET}efresh | ${CYAN}[pro]${RESET}ject | ${CYAN}[cr]${RESET}eate task | ${CYAN}[number]${RESET}"
         echo -n "? "
         read r

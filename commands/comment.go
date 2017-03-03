@@ -103,5 +103,6 @@ func trim(txt string) string {
 	result = regexp.MustCompile("#.*\n").ReplaceAllString(result, "")    // Remove comments
 	result = regexp.MustCompile("\n*$").ReplaceAllString(result, "")  // Remove blank lines
 	result = regexp.MustCompile("\n").ReplaceAllString(result, "\\n") // Escape
+	result = regexp.MustCompile("\"").ReplaceAllString(result, "\\\"") // comillas
 	return result
 }

@@ -1,21 +1,21 @@
 package main
 
 import (
-	"os"
-	"github.com/codegangsta/cli"
+    "os"
+    "github.com/codegangsta/cli"
 
-	"github.com/dbalseiro/asana/commands"
-	"github.com/dbalseiro/asana/config"
+    "github.com/dbalseiro/asana/commands"
+    "github.com/dbalseiro/asana/config"
 )
 
 func main() {
-	app := cli.NewApp()
-	app.Name = "asana"
-	app.Version = "0.1.2"
-	app.Usage = "asana cli client"
+    app := cli.NewApp()
+    app.Name = "asana"
+    app.Version = "0.1.2"
+    app.Usage = "asana cli client"
 
-	app.Commands = defs()
-	app.Run(os.Args)
+    app.Commands = defs()
+    app.Run(os.Args)
 }
 
 func isWithProject() bool {
@@ -24,115 +24,122 @@ func isWithProject() bool {
 }
 
 func defs() []cli.Command {
-	return []cli.Command{
-		{
-			Name:      "config",
-			ShortName: "c",
-			Usage:     "Asana configuration. Your settings will be saved in ~/.asana.yml",
-			Action: func(c *cli.Context) {
-				commands.Config(c)
-			},
-		},
-		{
-			Name:      "workspaces",
-			ShortName: "w",
-			Usage:     "get workspaces",
-			Action: func(c *cli.Context) {
-				commands.Workspaces(c)
-			},
-		},
+    return []cli.Command{
         {
-			Name:      "project-tasks",
-			ShortName: "pt",
-			Usage:     "get project tasks",
-			Action: func(c *cli.Context) {
-				commands.Tasks(c, true)
-			},
-		},
+            Name:      "config",
+            ShortName: "c",
+            Usage:     "Asana configuration. Your settings will be saved in ~/.asana.yml",
+            Action: func(c *cli.Context) {
+                commands.Config(c)
+            },
+        },
         {
-			Name:      "projects",
-			ShortName: "p",
-			Usage:     "get workspaces",
-			Action: func(c *cli.Context) {
-				commands.Projects(c)
-			},
-		},
-		{
-			Name:      "tasks",
-			ShortName: "ts",
-			Usage:     "get tasks",
-			Flags: []cli.Flag{
-				cli.BoolFlag{Name: "no-cache, n", Usage: "without cache"},
-				cli.BoolFlag{Name: "refresh, r", Usage: "update cache"},
-			},
-			Action: func(c *cli.Context) {
-				commands.Tasks(c, false)
-			},
-		},
-		{
-			Name:      "task",
-			ShortName: "t",
-			Usage:     "get a task",
-			Flags: []cli.Flag{
-				cli.BoolFlag{Name: "verbose, v", Usage: "verbose output"},
-			},
-			Action: func(c *cli.Context) {
-				commands.Task(c, isWithProject())
-			},
-		},
+            Name:      "workspaces",
+            ShortName: "w",
+            Usage:     "get workspaces",
+            Action: func(c *cli.Context) {
+                commands.Workspaces(c)
+            },
+        },
         {
-			Name:      "createtask",
-			ShortName: "ct",
-			Usage:     "create a task",
-			Flags: []cli.Flag{
-				cli.StringFlag{Name: "name, n", Usage: "name of the task"},
-			},
-			Action: func(c *cli.Context) {
-				commands.CreateTask(c, isWithProject())
-			},
-		},
-		{
-			Name:      "comment",
-			ShortName: "cm",
-			Usage:     "Post comment",
-			Action: func(c *cli.Context) {
-				commands.Comment(c, isWithProject())
-			},
-		},
-		{
-			Name:      "done",
-			Usage:     "Complete task",
-			Action: func(c *cli.Context) {
-				commands.Done(c, isWithProject())
-			},
-		},
-		{
-			Name:  "due",
-			Usage: "set due date",
-			Action: func(c *cli.Context) {
-				commands.DueOn(c, isWithProject())
-			},
-		},
+            Name:      "project-tasks",
+            ShortName: "pt",
+            Usage:     "get project tasks",
+            Action: func(c *cli.Context) {
+                commands.Tasks(c, true)
+            },
+        },
         {
-			Name:  "assign",
-			Usage: "assign task",
-			Action: func(c *cli.Context) {
-				commands.Assign(c, isWithProject())
-			},
-		},
+            Name:      "projects",
+            ShortName: "p",
+            Usage:     "get workspaces",
+            Action: func(c *cli.Context) {
+                commands.Projects(c)
+            },
+        },
         {
-			Name:  "addtag",
-			Usage: "add tag to task",
-			Action: func(c *cli.Context) {
-				commands.AddTag(c, isWithProject())
-			},
-		},
+            Name:      "tasks",
+            ShortName: "ts",
+            Usage:     "get tasks",
+            Flags: []cli.Flag{
+                cli.BoolFlag{Name: "no-cache, n", Usage: "without cache"},
+                cli.BoolFlag{Name: "refresh, r", Usage: "update cache"},
+            },
+            Action: func(c *cli.Context) {
+                commands.Tasks(c, false)
+            },
+        },
         {
-			Name:  "me",
-			Usage: "assign task to me",
-			Action: func(c *cli.Context) {
-				commands.AssignMe(c, isWithProject())
-			},
-		},
-	}
+            Name:      "task",
+            ShortName: "t",
+            Usage:     "get a task",
+            Flags: []cli.Flag{
+                cli.BoolFlag{Name: "verbose, v", Usage: "verbose output"},
+            },
+            Action: func(c *cli.Context) {
+                commands.Task(c, isWithProject())
+            },
+        },
+        {
+            Name:      "createtask",
+            ShortName: "ct",
+            Usage:     "create a task",
+            Flags: []cli.Flag{
+                cli.StringFlag{Name: "name, n", Usage: "name of the task"},
+            },
+            Action: func(c *cli.Context) {
+                commands.CreateTask(c, isWithProject())
+            },
+        },
+        {
+            Name:      "description",
+            Usage:     "Post description",
+            Action: func(c *cli.Context) {
+                commands.Description(c, isWithProject())
+            },
+        },
+        {
+            Name:      "comment",
+            ShortName: "cm",
+            Usage:     "Post comment",
+            Action: func(c *cli.Context) {
+                commands.Comment(c, isWithProject())
+            },
+        },
+        {
+            Name:      "done",
+            Usage:     "Complete task",
+            Action: func(c *cli.Context) {
+                commands.Done(c, isWithProject())
+            },
+        },
+        {
+            Name:  "due",
+            Usage: "set due date",
+            Action: func(c *cli.Context) {
+                commands.DueOn(c, isWithProject())
+            },
+        },
+        {
+            Name:  "assign",
+            Usage: "assign task",
+            Action: func(c *cli.Context) {
+                commands.Assign(c, isWithProject())
+            },
+        },
+        {
+            Name:  "addtag",
+            Usage: "add tag to task",
+            Action: func(c *cli.Context) {
+                commands.AddTag(c, isWithProject())
+            },
+        },
+        {
+            Name:  "me",
+            Usage: "assign task to me",
+            Action: func(c *cli.Context) {
+                commands.AssignMe(c, isWithProject())
+            },
+        },
+    }
 }
